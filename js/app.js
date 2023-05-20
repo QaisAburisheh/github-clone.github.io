@@ -1,68 +1,64 @@
 // Main Variables
+const theInput = document.querySelector(".get-repos input");
+const getButton = document.querySelector(".get-button");
+const container = document.querySelector(".container");
+const profile = document.querySelector(".profile");
+const tabs = document.querySelector(".tabs");
+const repos = document.querySelector(".repos");
 
-let theInput = document.querySelector(".get-repos input");
-let getButton = document.querySelector(".get-button");
-let container = document.querySelector(".container");
-let profile = document.querySelector(".profile");
-let tabs = document.querySelector(".tabs");
-let repos = document.querySelector(".repos");
-getButton.onclick = function () {
-  getRepos();
-};
+getButton.addEventListener("click", getRepos);
 
-// Get Repos Function
 function getRepos() {
-  if (theInput.value == "") {
+  if (theInput.value === "") {
     alert("Enter username");
-  } else {
-    // to prevent form value
-    event.preventDefault();
-    // it expire in 30 days
-    let token="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"
-    fetch(`https://api.github.com/users/${theInput.value}`,{
-      headers: {
-        Authorization:`Bearer ${token}`
-      }
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        const avatarUrl = response.avatar_url;
-        profile.innerHTML = `
-            <a href="#"><img src="${avatarUrl}" alt="" class="profile-pic"></a>
-                <p>${theInput.value}</p>
-                <button id="profile-btn">Edit profile</button>`;
-        tabs.innerHTML = `
-            <a href="#">Overview</a>
-            <a href="#">Repositories</a>
-            <a href="#">Projects</a>
-            <a href="#">Packages</a>
-            <a href="#">Stars</a>`;
-      });
-    fetch(`https://api.github.com/users/${theInput.value}/repos`,{
-      headers: {
-        Authorization:`Bearer ${token}`
-      }
-    })
-      .then((response) => response.json())
-      .then((repositories) => {
-        repos.innerHTML=""
-        for (let i = 0; i < repositories.length; i++) {
-          let repo = document.createElement("div");
-          repo.className = "repo";
-          repo.innerHTML = `
-          <a href="${repositories[i].clone_url}" target="_blank">${repositories[i].name}</a>
-          <p class="public-word">Public</p>
-          <p class="type-file">${repositories[i].language}</p>
-          `;
-          repos.appendChild(repo);
-        }
-      });
+    return;
   }
+
+  const token = "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";
+  event.preventDefault();
+  fetch(`https://api.github.com/users/${theInput.value}`)
+    .then(response => response.json())
+    .then(response => {
+      const avatarUrl = response.avatar_url;
+      profile.innerHTML = `
+        <a href="#"><img src="${avatarUrl}" alt="" class="profile-pic"></a>
+        <p>${theInput.value}</p>
+        <button id="profile-btn">Edit profile</button>`;
+      tabs.innerHTML = `
+        <a href="#">Overview</a>
+        <a href="#">Repositories</a>
+        <a href="#">Projects</a>
+        <a href="#">Packages</a>
+        <a href="#">Stars</a>`;
+    })
+    .catch(error => {
+      console.error(error);
+      alert("sorry there is an error, please try later");
+    });
+
+  fetch(`https://api.github.com/users/${theInput.value}/repos`)
+    .then(response => response.json())
+    .then(repositories => {
+      repos.innerHTML = "";
+      for (const repository of repositories) {
+        const repo = document.createElement("div");
+        repo.className = "repo";
+        repo.innerHTML = `
+          <a href="${repository.clone_url}" target="_blank">${repository.name}</a>
+          <p class="public-word">Public</p>
+          <p class="type-file">${repository.language}</p>`;
+        repos.appendChild(repo);
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      alert("sorry there is an error, please try later");
+    });
 }
-// catch error repeat static responsive style
-let body =document.body
-let darkMode =document.querySelector("#dark-mode-icon")
+
+const body = document.body;
+const darkMode = document.querySelector("#dark-mode-icon");
 
 darkMode.addEventListener("click", () => {
-  body.classList.toggle("dark-mode")
-})
+  body.classList.toggle("dark-mode");
+});

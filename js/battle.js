@@ -3,6 +3,20 @@ let theInputTwo =document.querySelector("#inputtwo")
 let startBtn = document.querySelector("#start-btn")
 let profileOne = document.querySelector(".profile-one")
 let profileTwo = document.querySelector(".profile-two")
+let container = document.querySelector(".container")
+container.style.width= "60%"
+
+
+
+
+// restart btn
+let reloadBtn =document.createElement("button")
+reloadBtn.id="reload"
+reloadBtn.textContent="Restart"
+reloadBtn.onclick =function(){
+  location.reload()
+}
+
 
 
 startBtn.onclick = function() {
@@ -16,19 +30,10 @@ function compare(){
         alert("You entered the same username");
     }else{
 
-        let token="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"
-        fetch(`https://api.github.com/users/${theInputOne.value}`,{
-          headers: {
-            Authorization:`Bearer ${token}`
-          }
-        })
+        fetch(`https://api.github.com/users/${theInputOne.value}`)
           .then((response) => response.json())
           .then((response) => {
-            fetch(`https://api.github.com/users/${theInputTwo.value}`,{
-          headers: {
-            Authorization:`Bearer ${token}`
-          }
-        })
+            fetch(`https://api.github.com/users/${theInputTwo.value}`)
           .then((response) => response.json())
           .then((app) => {
 
@@ -37,29 +42,35 @@ function compare(){
                 <h1 id="winner-color">Winner</h1>
                 <br>
                 <img class="images" src="${response.avatar_url}" alt="">
-                <h2>${theInputOne.value}</h2>
+                <h4>${theInputOne.value}</h4>
                 <br>
                 <p>Number of repos: ${response.public_repos}</p>
                 <p>Number of followers: ${response.followers}</p>
                 <p>Twitter username: ${response.twitter_username}</p>
-                
                 `
                 profileTwo.innerHTML=`
                 <h1 id="looser-color">Looser</h1>
                 <br>
                 <img class="images" src="${app.avatar_url}" alt="">
-                <h2>${theInputTwo.value}</h2>
+                <h4>${theInputTwo.value}</h4>
                 <br>
                 <p>Number of repos: ${app.public_repos}</p>
                 <p>Number of followers: ${app.followers}</p>
                 <p>Twitter username: ${app.twitter_username}</p>
                 `
-            }else{
+                startBtn.style.display="none"
+                container.appendChild(reloadBtn)
+
+            }else if(response.public_repos == app.public_repos){
+              console.log("It's Tie")
+            }
+            else{
                 profileOne.innerHTML=`
+                
                 <h1 id="looser-color">Looser</h1>
                 <br>
                 <img class="images" src="${response.avatar_url}" alt="">
-                <h1>${theInputOne.value}</h1>
+                <h4>${theInputOne.value}</h4>
                 <br>
                 <p>Number of repos: ${response.public_repos}</p>
                 <p>Number of followers: ${response.followers}</p>
@@ -69,12 +80,14 @@ function compare(){
                 <h1 id="winner-color">Winner</h1>
                 <br>
                 <img class="images" src="${app.avatar_url}" alt="">
-                <h2>${theInputTwo.value}</h2>
+                <h4>${theInputTwo.value}</h4>
                 <br>
                 <p>Number of repos: ${app.public_repos}</p>
                 <p>Number of followers: ${app.followers}</p>
                 <p>Twitter username: ${app.twitter_username}</p>
                 `
+                startBtn.style.display="none"
+                container.appendChild(reloadBtn)
             }
 
           })

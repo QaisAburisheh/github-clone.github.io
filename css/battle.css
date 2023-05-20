@@ -71,6 +71,21 @@
 #looser-color{
   color: red;
 }
+
+
+#reload{
+  grid-row: 3 / 4;
+  grid-column: 1 / 3;
+  width: 15%;
+  justify-self: center;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  color: #fff;
+  background-color: #000;
+}
 @media only screen and (max-width: 768px) {
   #start-btn{
   font-size: 10px;
@@ -78,6 +93,9 @@
 
 }
 @media only screen and (max-width: 576px){
+  .container{
+    font-size: 12px;
+  }
   input{
     width: 40%;
   }
